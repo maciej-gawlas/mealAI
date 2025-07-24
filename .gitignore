@@ -1,0 +1,44 @@
+# Node dependencies
+node_modules/
+
+# Logs
+logs*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*.local
+
+# Astro build artifacts
+.dist/
+.build/
+.astro/
+
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# VSCode settings
+.vscode/
+
+# macOS
+.DS_Store
+
+# Editor directories and files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Yarn integrity file
+.yarn-integrity
+
+# Misc
+coverage/
