@@ -75,6 +75,24 @@ export interface UpdateUserPreferencesResponseDTO {
 }
 
 //
+// Extended Preferences Types
+//
+
+/**
+ * Extended DTO for user preference that includes preference name.
+ */
+export type ExtendedUserPreferenceDTO = UserPreferenceDTO & {
+  name: string;
+};
+
+/**
+ * Response wrapping a list of extended user preferences.
+ */
+export interface ExtendedUserPreferencesResponseDTO {
+  data: ExtendedUserPreferenceDTO[];
+}
+
+//
 // Recipes
 //
 

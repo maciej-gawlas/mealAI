@@ -5,3 +5,7 @@ export interface Locals {
   supabase: SupabaseClient;
   user: AuthUserDTO | null;
 }
+
+declare namespace App {
+  interface Locals extends import('./types').Locals {}
+}

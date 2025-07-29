@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '../db/supabase.client';
-import type { UserPreferenceDTO } from '../types';
+import type { UserPreferenceDTO, ExtendedUserPreferenceDTO } from '../types';
 import { DB_TABLES } from '../db/database.constants';
 import type { Database } from '../db/database.types';
 
@@ -61,4 +61,39 @@ export async function updateUserPreferences(
   }
 
   return newPreferences;
+}
+
+/**
+ * Gets all preferences for a specific user including preference names
+ * @param supabase Supabase client instance
+ * @param userId ID of the user whose preferences are being retrieved
+ * @returns Array of user preference mappings with preference names
+ * @throws Error if database operation fails
+ */
+export async function getUserPreferences(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<ExtendedUserPreferenceDTO[]> {
+  const { data, error } = await supabase
+    .from(DB_TABLES.USER_PREFERENCES)
+    .select(`
+      user_id,
+      preference_id,
+      ${DB_TABLES.PREFERENCES}!inner(name)
+    `)
+    .eq('user_id', userId);
+
+  if (error) {
+    console.error('Failed to retrieve user preferences:', error);
+    throw new Error('Failed to retrieve user preferences');
+  }
+
+  // Transform data to match the expected format
+  const formattedData = data?.map((item) => ({
+    user_id: item.user_id,
+    preference_id: item.preference_id,
+    name: item[DB_TABLES.PREFERENCES].name,
+  })) || [];
+
+  return formattedData;
 }

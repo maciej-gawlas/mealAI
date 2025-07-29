@@ -100,8 +100,8 @@
 ```json
 {
   "data": [
-    { "user_id": "user-uuid", "preference_id": "uuid1" },
-    { "user_id": "user-uuid", "preference_id": "uuid3" }
+    { "user_id": "user-uuid", "preference_id": "uuid1", "name": "Vegan" },
+    { "user_id": "user-uuid", "preference_id": "uuid3", "name": "Keto" }
   ]
 }
 ```
