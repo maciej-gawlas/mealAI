@@ -1,5 +1,11 @@
 import type { SupabaseClient } from "../db/supabase.client";
-import type { CreateRecipeCommand, RecipeDTO } from "../types";
+import type {
+  CreateRecipeCommand,
+  RecipeDTO,
+  ListRecipesResponseDTO,
+} from "../types";
+import type { z } from "zod";
+import type { ListRecipesQuerySchema } from "../schemas/recipe";
 
 /**
  * Creates a new recipe for the specified user.
@@ -52,4 +58,53 @@ export async function getRecipeById(
   }
 
   return data;
+}
+
+/**
+ * Lists recipes for the specified user with pagination, sorting and filtering.
+ *
+ * @param supabase - The Supabase client instance
+ * @param userId - The ID of the user whose recipes to list
+ * @param query - The query parameters for pagination, sorting and filtering
+ * @returns Promise resolving to paginated recipes response
+ * @throws Will throw an error if the database operation fails
+ */
+export async function listRecipes(
+  supabase: SupabaseClient,
+  userId: string,
+  query: z.infer<typeof ListRecipesQuerySchema>,
+): Promise<ListRecipesResponseDTO> {
+  const { page, limit, sort, ai_generated } = query;
+  const start = (page - 1) * limit;
+  const end = start + limit - 1;
+
+  let queryBuilder = supabase
+    .from("recipes")
+    .select("*", { count: "exact" })
+    .eq("user_id", userId)
+    .range(start, end);
+
+  if (ai_generated !== undefined) {
+    queryBuilder = queryBuilder.eq("is_ai_generated", ai_generated);
+  }
+
+  if (sort) {
+    const [column, direction] = sort.split(" ");
+    queryBuilder = queryBuilder.order(column, { ascending: !direction });
+  } else {
+    queryBuilder = queryBuilder.order("created_at", { ascending: false });
+  }
+
+  const { data, error, count } = await queryBuilder;
+
+  if (error) throw error;
+
+  return {
+    meta: {
+      page,
+      limit,
+      total: count ?? 0,
+    },
+    data: data ?? [],
+  };
 }

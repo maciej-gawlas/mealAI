@@ -1,9 +1,52 @@
 import type { APIRoute } from "astro";
-import { CreateRecipeSchema } from "../../schemas/recipe";
-import { createRecipe } from "../../services/recipeService";
+import {
+  CreateRecipeSchema,
+  ListRecipesQuerySchema,
+} from "../../schemas/recipe";
+import { createRecipe, listRecipes } from "../../services/recipeService";
 import { DEFAULT_USER_ID, supabaseAdminClient } from "../../db/supabase.client";
 
 export const prerender = false;
+
+export const GET: APIRoute = async ({ request, locals }) => {
+  try {
+    // Extract query parameters
+    const url = new URL(request.url);
+    const queryParams = Object.fromEntries(url.searchParams);
+
+    // Validate query parameters
+    const validatedQuery = ListRecipesQuerySchema.parse(queryParams);
+
+    // // Get current user from session
+    // const userId = locals.user?.id;
+    // if (!userId) {
+    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    //     status: 401,
+    //     headers: { "Content-Type": "application/json" },
+    //   });
+    // }
+
+    // Get recipes from service
+    // const response = await listRecipes(locals.supabase, userId, validatedQuery);
+    const response = await listRecipes(
+      supabaseAdminClient,
+      DEFAULT_USER_ID,
+      validatedQuery,
+    );
+
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
