@@ -1,4 +1,4 @@
-import type { TablesInsert, Tables } from './db/database.types';
+import type { TablesInsert, Tables } from "./db/database.types";
 
 //
 // Auth
@@ -39,7 +39,7 @@ export type LoginResponseDTO = AuthResponseDTO;
 /**
  * DTO for a dietary preference.
  */
-export type PreferenceDTO = Tables<'preferences'>;
+export type PreferenceDTO = Tables<"preferences">;
 
 /**
  * Response wrapping a list of preferences.
@@ -51,7 +51,7 @@ export interface PreferencesResponseDTO {
 /**
  * DTO for mapping a user to a preference.
  */
-export type UserPreferenceDTO = Tables<'user_preferences'>;
+export type UserPreferenceDTO = Tables<"user_preferences">;
 
 /**
  * Response wrapping a list of user preferences.
@@ -99,7 +99,7 @@ export interface ExtendedUserPreferencesResponseDTO {
 /**
  * DTO representing a recipe.
  */
-export type RecipeDTO = Tables<'recipes'>;
+export type RecipeDTO = Tables<"recipes">;
 
 /**
  * Metadata for paginated recipe lists.
@@ -127,8 +127,8 @@ export type GetRecipeResponseDTO = RecipeDTO;
  * Command to create a new recipe. `user_id` is inferred from auth context.
  */
 export type CreateRecipeCommand = Pick<
-  TablesInsert<'recipes'>,
-  'name' | 'ingredients' | 'instructions' | 'is_ai_generated'
+  TablesInsert<"recipes">,
+  "name" | "ingredients" | "instructions" | "is_ai_generated"
 >;
 
 /**
@@ -163,4 +163,11 @@ export interface AIRecipeDTO {
 export interface GenerateRecipeResponseDTO {
   recipe: AIRecipeDTO;
   disclaimer: string;
+}
+
+/**
+ * Command to delete a recipe.
+ */
+export interface DeleteRecipeCommand {
+  id: string;
 }

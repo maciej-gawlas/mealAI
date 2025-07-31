@@ -24,3 +24,10 @@ export const CreateRecipeSchema = z.object({
   instructions: z.string().min(1),
   is_ai_generated: z.boolean(),
 });
+
+/**
+ * Schema for validating recipe ID in delete request
+ */
+export const DeleteRecipeSchema = z.object({
+  id: uuidSchema,
+});

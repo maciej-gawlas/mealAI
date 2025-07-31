@@ -103,8 +103,26 @@ export async function listRecipes(
     meta: {
       page,
       limit,
-      total: count ?? 0,
+      total: count || 0,
     },
-    data: data ?? [],
+    data: data || [],
   };
+}
+
+/**
+ * Deletes a recipe with the specified ID belonging to the given user.
+ * Thanks to RLS policies, this will only delete the recipe if it belongs to the authenticated user.
+ *
+ * @param supabase - The Supabase client instance
+ * @param recipeId - The ID of the recipe to delete
+ * @returns Promise resolving when the recipe is deleted
+ * @throws Will throw an error if the recipe doesn't exist or if the database operation fails
+ */
+export async function deleteRecipe(
+  supabase: SupabaseClient,
+  recipeId: string,
+): Promise<void> {
+  const { error } = await supabase.from("recipes").delete().eq("id", recipeId);
+
+  if (error) throw error;
 }
