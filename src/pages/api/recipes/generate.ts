@@ -26,12 +26,31 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const body = await request.json();
     const validatedData = GenerateRecipeSchema.parse(body);
 
-    // Generate recipe using AI
-    const recipe = await generateRecipeWithAI(
-      supabaseAdminClient,
-      DEFAULT_USER_ID,
-      validatedData,
-    );
+    // Fetch preference names from database
+    const { data: preferences, error: preferencesError } =
+      await supabaseAdminClient
+        .from("preferences")
+        .select("name")
+        .in("id", validatedData.preferences);
+
+    if (preferencesError) {
+      console.error("Error fetching preferences:", preferencesError);
+      return new Response(
+        JSON.stringify({ error: "Error fetching preferences" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    const preferenceNames = preferences?.map((pref) => pref.name) || [];
+
+    // Generate recipe using AI with preference names
+    const recipe = await generateRecipeWithAI({
+      description: validatedData.description,
+      preferences: preferenceNames,
+    });
 
     return new Response(JSON.stringify({ recipe }), {
       status: 202,
