@@ -254,8 +254,7 @@
     "name": "Vegan Buddha Bowl",
     "ingredients": "Quinoa, Chickpeas, Avocado, Spinach, Tahini Dressing",
     "instructions": "Cook quinoa according to package instructions, roast chickpeas until crispy, assemble bowl with quinoa, chickpeas, sliced avocado and spinach, then drizzle with tahini dressing."
-  },
-  "disclaimer": "AI-generated content may contain allergens and inaccuracies. Please verify ingredient compatibility before use."
+  }
 }
 ```
 
