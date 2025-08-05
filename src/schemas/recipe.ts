@@ -15,6 +15,7 @@ export const ListRecipesQuerySchema = z.object({
     .enum(["created_at", "created_at desc", "name", "name desc"])
     .optional(),
   ai_generated: z.coerce.boolean().optional(),
+  preference: z.string().uuid().optional(),
 });
 
 export const CreateRecipeSchema = z.object({

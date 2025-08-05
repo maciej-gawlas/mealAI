@@ -5,6 +5,7 @@
 ### ✨ Features
 
 - **Recipe Preferences**: Users can now associate dietary and culinary preferences with their recipes. When creating a new recipe, an optional array of `preference_ids` can be provided. This allows for better categorization and future filtering of recipes based on user needs.
+- **Filter Recipes by Preference**: Added a dropdown in the recipes list and support for the query parameter `preference` in the `GET /api/recipes` endpoint, enabling users to filter recipes by their dietary preferences.
 
 ### 🛠️ Technical Changes
 

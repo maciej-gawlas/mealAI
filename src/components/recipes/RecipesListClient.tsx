@@ -1,27 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import RecipesList from "./RecipesList";
 import EmptyState from "./EmptyState";
 import type { RecipeViewModel } from "../../types";
+import { PreferencesSelect } from "./PreferencesSelect";
+
+interface RecipePreference {
+  preference: {
+    id: string;
+    name: string;
+  };
+}
+
+interface RawRecipe {
+  id: string;
+  name: string;
+  created_at: string;
+  recipe_preferences?: RecipePreference[];
+}
 
 const RecipesListClient: React.FC = () => {
   const [recipes, setRecipes] = useState<RecipeViewModel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [selectedPreference, setSelectedPreference] = useState("all");
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch("/api/recipes");
+        const url = new URL("/api/recipes", window.location.origin);
+        if (selectedPreference && selectedPreference !== "all") {
+          url.searchParams.set("preference", selectedPreference);
+        }
+
+        const response = await fetch(url);
         if (!response.ok) throw new Error("API error");
         const data = await response.json();
         setRecipes(
-          data.data.map((recipe: any) => ({
+          data.data.map((recipe: RawRecipe) => ({
             id: recipe.id,
             name: recipe.name,
-            preferences: recipe.recipe_preferences?.map((pref) => ({
-              id: pref.preference.id,
-              name: pref.preference.name,
-              preference_id: pref.preference.id,
+            preferences: recipe.recipe_preferences?.map((rp) => ({
+              id: rp.preference.id,
+              name: rp.preference.name,
+              preference_id: rp.preference.id,
             })),
             createdAtFormatted: new Date(recipe.created_at).toLocaleDateString(
               "pl-PL",
@@ -41,7 +62,7 @@ const RecipesListClient: React.FC = () => {
       }
     };
     fetchRecipes();
-  }, []);
+  }, [selectedPreference]);
 
   if (hasError) {
     return (
@@ -52,13 +73,25 @@ const RecipesListClient: React.FC = () => {
       </div>
     );
   }
+
   if (isLoading) {
     return <RecipesList isLoading={true} />;
   }
-  return recipes.length > 0 ? (
-    <RecipesList recipes={recipes} />
-  ) : (
-    <EmptyState />
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <PreferencesSelect
+          value={selectedPreference}
+          onChange={setSelectedPreference}
+        />
+      </div>
+      {recipes.length > 0 ? (
+        <RecipesList recipes={recipes} isLoading={false} />
+      ) : (
+        <EmptyState />
+      )}
+    </div>
   );
 };
 

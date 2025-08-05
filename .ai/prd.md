@@ -42,6 +42,12 @@ Użytkownicy, którzy chcą gotować zdrowo i zgodnie ze swoimi restrykcjami lub
 - W przypadku błędu komunikacji z API, użytkownikowi wyświetlany jest stosowny komunikat z możliwością ponowienia próby.
 - Przy każdym przepisie wygenerowanym przez AI musi być widoczne i jednoznaczne ostrzeżenie (disclaimer) informujące o potencjalnym ryzyku (np. obecności alergenów) i konieczności weryfikacji składników.
 
+### 3.5 Filtrowanie przepisów po preferencjach
+
+- Na stronie listy przepisów wyświetlany jest dropdown (`<PreferencesSelect />`) umożliwiający wybór jednej preferencji.
+- Przy zmianie wartości wysyłane jest zapytanie GET do `/api/recipes?preference={pref}` zwracające tylko pasujące przepisy.
+- Opcja "Wszystkie" (pusta wartość) przywraca pełną listę przepisów.
+
 ## 4. Granice produktu
 
 Następujące funkcjonalności celowo NIE wchodzą w zakres wersji MVP:
@@ -169,6 +175,17 @@ Następujące funkcjonalności celowo NIE wchodzą w zakres wersji MVP:
   2.  Po kliknięciu "Usuń" pojawia się okno dialogowe z pytaniem o potwierdzenie, np. "Czy na pewno chcesz usunąć ten przepis?".
   3.  Jeśli potwierdzę, przepis jest trwale usuwany z mojej listy.
   4.  Jeśli anuluję, okno dialogowe znika, a przepis pozostaje na liście.
+
+---
+
+- ID: US-012
+- Tytuł: Filtrowanie przepisów po preferencjach
+- Opis: Jako użytkownik, chcę filtrować listę moich przepisów według wybranej preferencji dietetycznej, aby szybko znaleźć pasujące przepisy.
+- Kryteria akceptacji:
+  1. Na stronie listy przepisów jest widoczny dropdown dla wyboru preferencji.
+  2. Po wybraniu preferencji lista odświeża się, wyświetlając tylko przepisy z daną preferencją.
+  3. Wybór opcji "Wszystkie" przywraca wyświetlanie wszystkich przepisów.
+  4. W przypadku błędu pobierania danych wyświetlany jest komunikat o błędzie.
 
 ## 6. Metryki sukcesu
 

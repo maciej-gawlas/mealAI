@@ -158,8 +158,32 @@ export async function listRecipes(
         )
       )
     `, { count: "exact" })
-    .eq("user_id", userId)
-    .range(start, end);
+    .eq("user_id", userId);
+
+  // Filter by preference if specified
+  if (query.preference) {
+    const { data: recipeIds } = await supabase
+      .from("recipe_preferences")
+      .select("recipe_id")
+      .eq("preference_id", query.preference);
+
+    if (recipeIds && recipeIds.length > 0) {
+      queryBuilder = queryBuilder.in("id", recipeIds.map(r => r.recipe_id));
+    } else {
+      // If no recipes found with this preference, return empty result
+      return {
+        meta: {
+          page,
+          limit,
+          total: 0,
+        },
+        data: [],
+      };
+    }
+  }
+
+  // Apply pagination after filtering
+  queryBuilder = queryBuilder.range(start, end);
 
   if (ai_generated !== undefined) {
     queryBuilder = queryBuilder.eq("is_ai_generated", ai_generated);
