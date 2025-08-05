@@ -3,6 +3,7 @@ import type {
   CreateRecipeCommand,
   RecipeDTO,
   ListRecipesResponseDTO,
+  ExtendedRecipeDTO,
 } from "../types";
 import type { z } from "zod";
 import type { ListRecipesQuerySchema } from "../schemas/recipe";
@@ -20,15 +21,75 @@ export async function createRecipe(
   supabase: SupabaseClient,
   userId: string,
   command: CreateRecipeCommand,
-): Promise<RecipeDTO> {
-  const { data, error } = await supabase
+): Promise<ExtendedRecipeDTO> {
+  const { preference_ids, ...recipeData } = command;
+
+  // Start a transaction
+  const { data: newRecipe, error: recipeError } = await supabase
     .from("recipes")
-    .insert({ user_id: userId, ...command })
-    .select("*")
+    .insert({
+      user_id: userId,
+      ...recipeData,
+      is_ai_generated: recipeData.is_ai_generated || false,
+    })
+    .select(
+      `
+      *,
+      recipe_preferences (
+        preference:preferences (
+          id,
+          name
+        )
+      )
+    `,
+    )
     .single();
 
-  if (error) throw error;
-  return data;
+  if (recipeError) {
+    throw recipeError;
+  }
+
+  if (preference_ids && preference_ids.length > 0) {
+    const recipePreferences = preference_ids.map((preferenceId) => ({
+      recipe_id: newRecipe.id,
+      preference_id: preferenceId,
+    }));
+
+    const { error: preferencesError } = await supabase
+      .from("recipe_preferences")
+      .insert(recipePreferences);
+
+    if (preferencesError) {
+      // Attempt to delete the created recipe if preferences fail to be added
+      await supabase.from("recipes").delete().eq("id", newRecipe.id);
+      throw preferencesError;
+    }
+
+    // Fetch the recipe again with its preferences
+    const { data: recipe, error: fetchError } = await supabase
+      .from("recipes")
+      .select(
+        `
+        *,
+        recipe_preferences (
+          preference:preferences (
+            id,
+            name
+          )
+        )
+      `,
+      )
+      .eq("id", newRecipe.id)
+      .single();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    return recipe;
+  }
+
+  return newRecipe;
 }
 
 /**

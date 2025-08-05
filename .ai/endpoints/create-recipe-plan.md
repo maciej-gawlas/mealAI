@@ -20,7 +20,8 @@ Dodaj nową recepturę dla uwierzytelnionego użytkownika w bazie danych Supabas
     "name": "My Dish",
     "ingredients": "Chicken, Rice, Spices",
     "instructions": "Cook rice and chicken, then season",
-    "is_ai_generated": false
+    "is_ai_generated": false,
+    "preference_ids": ["uuid-pref-1", "uuid-pref-2"]
   }
   ```
 
@@ -33,31 +34,19 @@ Dodaj nową recepturę dla uwierzytelnionego użytkownika w bazie danych Supabas
 
 ## 4. Szczegóły odpowiedzi
 
-- Status 201 Created
-
-- Response Body (JSON):
-
-  ```json
-  {
-    "id": "uuid",
-    "user_id": "user-uuid",
-    "name": "My Dish",
-    "ingredients": "Chicken, Rice, Spices",
-    "instructions": "Cook rice and chicken, then season",
-    "is_ai_generated": false,
-    "created_at": "2025-07-23T12:34:56Z",
-    "updated_at": "2025-07-23T12:34:56Z"
-  }
-  ```
+- **201 Created**: Zwraca nowo utworzony przepis wraz z listą powiązanych preferencji.
+- **400 Bad Request**: Błąd walidacji (np. brak nazwy, nieprawidłowe UUID preferencji).
+- **401 Unauthorized**: Użytkownik niezalogowany.
 
 ## 5. Przepływ danych
 
-1. Rice client przekazuje token w Authorization header.
-2. Astro handler (`src/pages/api/recipes.ts`) pobiera `locals.supabase` i sprawdza sesję użytkownika.
-3. Walidacja ciała żądania za pomocą Zod.
-4. Wywołanie `recipeService.createRecipe(userId, command)`.
-5. `recipeService` używa `locals.supabase.from('recipes').insert(...)` w celu zapisania rekordu.
-6. Zwrócenie utworzonego wiersza z bazy.
+1. Klient wysyła żądanie `POST` do `/api/recipes` z danymi przepisu i opcjonalną tablicą `preference_ids`.
+2. Middleware Astro weryfikuje token JWT i pobiera `userId`.
+3. Handler API waliduje ciało żądania za pomocą schemy Zod (`CreateRecipeSchema`), sprawdzając typy danych, w tym `preference_ids` jako tablicę stringów UUID.
+4. Wywoływana jest transakcja bazodanowa:
+   a. Do tabeli `recipes` wstawiany jest nowy rekord z danymi przepisu i `user_id`.
+   b. Jeśli w żądaniu przekazano `preference_ids`, dla każdego ID wstawiany jest rekord do tabeli `recipe_preferences`, łącząc nowo utworzony przepis z daną preferencją.
+5. Jeśli transakcja się powiedzie, handler zwraca odpowiedź `201 Created` z danymi nowego przepisu. W przypadku błędu transakcja jest wycofywana, a do klienta zwracany jest odpowiedni kod błędu (np. 500).
 
 ## 6. Względy bezpieczeństwa
 
@@ -97,6 +86,7 @@ Dodaj nową recepturę dla uwierzytelnionego użytkownika w bazie danych Supabas
      ingredients: z.string().min(1),
      instructions: z.string().min(1),
      is_ai_generated: z.boolean(),
+     preference_ids: z.array(z.string().uuid()).optional(),
    });
    ```
 

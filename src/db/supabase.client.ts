@@ -10,7 +10,7 @@ export const supabaseClient = createClient<Database>(
 );
 export type SupabaseClient = typeof supabaseClient;
 
-export const DEFAULT_USER_ID = "85bb7b19-ed26-44c0-95b3-1bac87f9a937";
+export const DEFAULT_USER_ID = "b7ee6dd1-f782-4663-9bd3-12bd4f316139";
 
 // Service role key client for server-side operations (bypasses RLS)
 const supabaseServiceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;

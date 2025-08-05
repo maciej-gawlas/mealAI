@@ -66,14 +66,20 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const body = await request.json();
     const validatedData = CreateRecipeSchema.parse(body);
 
-    // Create recipe
+    // Create recipe with preferences
     const recipe = await createRecipe(
       supabaseAdminClient,
       DEFAULT_USER_ID,
       validatedData,
     );
 
-    return new Response(JSON.stringify(recipe), {
+    // Transform preferences to match the expected format
+    const responseData = {
+      ...recipe,
+      preferences: recipe.recipe_preferences?.map((rp) => rp.preference) || [],
+    };
+
+    return new Response(JSON.stringify(responseData), {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });

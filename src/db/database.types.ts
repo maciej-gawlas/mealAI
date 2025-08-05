@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
-          query?: string
           extensions?: Json
-          variables?: Json
           operationName?: string
+          query?: string
+          variables?: Json
         }
         Returns: Json
       }
@@ -48,6 +48,36 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      recipe_preferences: {
+        Row: {
+          preference_id: string
+          recipe_id: string
+        }
+        Insert: {
+          preference_id: string
+          recipe_id: string
+        }
+        Update: {
+          preference_id?: string
+          recipe_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_preferences_preference_id_fkey"
+            columns: ["preference_id"]
+            isOneToOne: false
+            referencedRelation: "preferences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_preferences_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       recipes: {
         Row: {

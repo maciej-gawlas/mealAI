@@ -37,11 +37,20 @@ This table is managed by Supabase Auth.
 - created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 - updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 
+### 1.4 recipe_preferences
+
+- recipe_id UUID NOT NULL
+  ‣ FK → recipes(id) ON DELETE CASCADE
+- preference_id UUID NOT NULL
+  ‣ FK → preferences(id) ON DELETE CASCADE
+- PRIMARY KEY (recipe_id, preference_id)
+
 ## 2. Relacje między tabelami
 
 - auth.users (1) ←— (∞) recipes
 - auth.users (1) ←— (∞) user_preferences — (∞) → preferences
 - preferences (1) ←— (∞) user_preferences
+- recipes (1) ←— (∞) recipe_preferences — (∞) → preferences
 
 ## 3. Indeksy
 
@@ -49,14 +58,16 @@ This table is managed by Supabase Auth.
 - recipes(created_at)
 - UNIQUE INDEX on preferences(name) (implicit)
 - PRIMARY KEY implicit B-tree on user_preferences(user_id, preference_id)
+- PRIMARY KEY implicit B-tree on recipe_preferences(recipe_id, preference_id)
 
 ## 4. Zasady PostgreSQL i RLS
 
-1. Włączamy RLS na `recipes` i `user_preferences`:
+1. Włączamy RLS na `recipes`, `user_preferences` i `recipe_preferences`:
 
    ```sql
    ALTER TABLE recipes ENABLE ROW LEVEL SECURITY;
    ALTER TABLE user_preferences ENABLE ROW LEVEL SECURITY;
+   ALTER TABLE recipe_preferences ENABLE ROW LEVEL SECURITY;
    ```
 
 2. Polityki CRUD (tylko właściciel może):
@@ -67,6 +78,11 @@ This table is managed by Supabase Auth.
 
    CREATE POLICY "user_prefs_owner" ON user_preferences
      FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+   CREATE POLICY "recipe_prefs_owner" ON recipe_preferences
+     FOR ALL USING (
+       (SELECT user_id FROM recipes WHERE id = recipe_id) = auth.uid()
+     );
    ```
 
 3. Trigger do automatycznego ustawiania `updated_at`:

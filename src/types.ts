@@ -54,10 +54,22 @@ export interface PreferencesResponseDTO {
 export type UserPreferenceDTO = Tables<"user_preferences">;
 
 /**
+ * DTO for mapping a recipe to a preference.
+ */
+export type RecipePreferenceDTO = Tables<"recipe_preferences">;
+
+/**
  * Response wrapping a list of user preferences.
  */
 export interface UserPreferencesResponseDTO {
   data: UserPreferenceDTO[];
+}
+
+/**
+ * Response wrapping a list of recipe preferences.
+ */
+export interface RecipePreferencesResponseDTO {
+  data: RecipePreferenceDTO[];
 }
 
 /**
@@ -68,10 +80,24 @@ export interface UpdateUserPreferencesCommand {
 }
 
 /**
+ * Command to update a recipe's preferences.
+ */
+export interface UpdateRecipePreferencesCommand {
+  preferences: string[];
+}
+
+/**
  * Response returned after updating user preferences.
  */
 export interface UpdateUserPreferencesResponseDTO {
   data: UserPreferenceDTO[];
+}
+
+/**
+ * Response returned after updating recipe preferences.
+ */
+export interface UpdateRecipePreferencesResponseDTO {
+  data: RecipePreferenceDTO[];
 }
 
 //
@@ -86,10 +112,24 @@ export type ExtendedUserPreferenceDTO = UserPreferenceDTO & {
 };
 
 /**
+ * Extended DTO for recipe preference that includes preference name.
+ */
+export type ExtendedRecipePreferenceDTO = RecipePreferenceDTO & {
+  name: string;
+};
+
+/**
  * Response wrapping a list of extended user preferences.
  */
 export interface ExtendedUserPreferencesResponseDTO {
   data: ExtendedUserPreferenceDTO[];
+}
+
+/**
+ * Response wrapping a list of extended recipe preferences.
+ */
+export interface ExtendedRecipePreferencesResponseDTO {
+  data: ExtendedRecipePreferenceDTO[];
 }
 
 //
@@ -100,6 +140,18 @@ export interface ExtendedUserPreferencesResponseDTO {
  * DTO representing a recipe.
  */
 export type RecipeDTO = Tables<"recipes">;
+
+/**
+ * Extended DTO for a recipe that includes its preferences.
+ */
+export interface ExtendedRecipeDTO extends RecipeDTO {
+  recipe_preferences: {
+    preference: {
+      id: string;
+      name: string;
+    };
+  }[];
+}
 
 /**
  * Metadata for paginated recipe lists.
@@ -124,12 +176,14 @@ export interface ListRecipesResponseDTO {
 export type GetRecipeResponseDTO = RecipeDTO;
 
 /**
- * Command to create a new recipe. `user_id` is inferred from auth context.
+ * Command to create a new recipe.
  */
-export type CreateRecipeCommand = Pick<
+export type CreateRecipeCommand = Omit<
   TablesInsert<"recipes">,
-  "name" | "ingredients" | "instructions" | "is_ai_generated"
->;
+  "id" | "user_id" | "created_at" | "updated_at"
+> & {
+  preference_ids?: string[];
+};
 
 /**
  * Response returned after creating a recipe.
@@ -155,6 +209,7 @@ export interface AIRecipeDTO {
   name: string;
   ingredients: string;
   instructions: string;
+  is_ai_generated: boolean;
 }
 
 /**
@@ -178,5 +233,9 @@ export interface DeleteRecipeCommand {
 export interface RecipeViewModel {
   id: string;
   name: string;
+  ingredients: string;
+  instructions: string;
+  is_ai_generated: boolean;
   createdAtFormatted: string;
+  preferences?: ExtendedRecipePreferenceDTO[];
 }
