@@ -9,6 +9,7 @@ import {
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, locals }) => {
+  console.log("GET recipe by ID:", params.id);
   try {
     // 1. Parse and validate the ID parameter
     const { id } = params;

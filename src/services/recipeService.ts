@@ -105,10 +105,18 @@ export async function getRecipeById(
   supabase: SupabaseClient,
   userId: string,
   recipeId: string,
-): Promise<RecipeDTO | null> {
+): Promise<ExtendedRecipeDTO | null> {
   const { data, error } = await supabase
     .from("recipes")
-    .select("*")
+    .select(`
+      *,
+      recipe_preferences (
+        preference:preferences (
+          id,
+          name
+        )
+      )
+    `)
     .eq("id", recipeId)
     .eq("user_id", userId)
     .single();
