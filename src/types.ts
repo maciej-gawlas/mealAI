@@ -171,3 +171,12 @@ export interface GenerateRecipeResponseDTO {
 export interface DeleteRecipeCommand {
   id: string;
 }
+
+/**
+ * View model for recipe list item display.
+ */
+export interface RecipeViewModel {
+  id: string;
+  name: string;
+  createdAtFormatted: string;
+}
