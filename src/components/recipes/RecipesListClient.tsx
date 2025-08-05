@@ -18,6 +18,11 @@ const RecipesListClient: React.FC = () => {
           data.data.map((recipe: any) => ({
             id: recipe.id,
             name: recipe.name,
+            preferences: recipe.recipe_preferences?.map((pref) => ({
+              id: pref.preference.id,
+              name: pref.preference.name,
+              preference_id: pref.preference.id,
+            })),
             createdAtFormatted: new Date(recipe.created_at).toLocaleDateString(
               "pl-PL",
               {

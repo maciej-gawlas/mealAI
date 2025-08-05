@@ -149,7 +149,15 @@ export async function listRecipes(
 
   let queryBuilder = supabase
     .from("recipes")
-    .select("*", { count: "exact" })
+    .select(`
+      *,
+      recipe_preferences (
+        preference:preferences (
+          id,
+          name
+        )
+      )
+    `, { count: "exact" })
     .eq("user_id", userId)
     .range(start, end);
 

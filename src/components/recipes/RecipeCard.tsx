@@ -2,12 +2,14 @@ import React from "react";
 import type { RecipeViewModel } from "../../types";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import DeleteButtonWithDialog from "./DeleteButtonWithDialog";
+import { Badge } from "../ui/badge";
 
 interface Props {
   recipe: RecipeViewModel;
 }
 
 const RecipeCard: React.FC<Props> = ({ recipe }) => {
+  console.log(recipe.preferences); // Debugging line to check preferences
   return (
     <Card className="relative group hover:shadow-lg transition-all duration-300">
       <a href={`/recipes/${recipe.id}`} className="block">
@@ -18,6 +20,19 @@ const RecipeCard: React.FC<Props> = ({ recipe }) => {
           <p className="text-sm text-muted-foreground">
             {recipe.createdAtFormatted}
           </p>
+          {recipe.preferences && recipe.preferences.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {recipe.preferences.map((pref) => (
+                <Badge
+                  key={pref.preference_id}
+                  variant="secondary"
+                  className="text-xs"
+                >
+                  {pref.name}
+                </Badge>
+              ))}
+            </div>
+          )}
         </CardHeader>
       </a>
 
