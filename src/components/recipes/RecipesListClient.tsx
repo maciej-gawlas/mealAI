@@ -3,6 +3,8 @@ import RecipesList from "./RecipesList";
 import EmptyState from "./EmptyState";
 import type { RecipeViewModel } from "../../types";
 import { PreferencesSelect } from "./PreferencesSelect";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 interface RecipePreference {
   preference: {
@@ -80,11 +82,20 @@ const RecipesListClient: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end space-x-4">
         <PreferencesSelect
           value={selectedPreference}
           onChange={setSelectedPreference}
         />
+        <Button
+          onClick={() => {
+            window.location.href = "/recipes/add";
+          }}
+          className="flex items-center gap-2 hover:bg-primary/90 hover:text-white transition duration-150"
+        >
+          <Plus className="w-4 h-4" />
+          Dodaj przepis
+        </Button>
       </div>
       {recipes.length > 0 ? (
         <RecipesList recipes={recipes} isLoading={false} />

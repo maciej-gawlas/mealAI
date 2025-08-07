@@ -1,0 +1,11 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import AddRecipeView from '@/components/recipes/AddRecipeView';
+
+---
+
+<Layout title="Dodaj przepis">
+  <div transition:animate="slide">
+    <AddRecipeView client:load />
+  </div>
+</Layout>

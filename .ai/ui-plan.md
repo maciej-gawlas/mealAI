@@ -55,7 +55,7 @@ Struktura folderów:
 - Ścieżka: `/recipes/add`
 - Cel: stworzenie nowego przepisu (manual/AI)
 - Zakładki:
-  - Ręcznie: pola `Input name`, `Textarea ingredients`, `Textarea instructions`, `Button Zapisz`
+  - Ręcznie: pola `Input name`, `Textarea ingredients`, `Textarea instructions`, `PreferenceCheckboxGroup`, `Button Zapisz`
   - Generuj AI: `Input prompt`, `PreferenceCheckboxGroup`, `Button Generuj`, loader, disclaimer
 - Kluczowe komponenty: `Tabs`, `Form`, `useTransition` loader, `Toast`, `Disclaimer`
 - UX/dostępność: responsive tabs, aria-controls, aria-selected, wyraźny loader, możliwość edycji danych AI

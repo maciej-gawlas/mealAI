@@ -190,6 +190,29 @@ export type CreateRecipeCommand = Omit<
  */
 export type CreateRecipeResponseDTO = RecipeDTO;
 
+/**
+ * View model for recipe list item display.
+ */
+export interface RecipeViewModel {
+  id: string;
+  name: string;
+  ingredients: string;
+  instructions: string;
+  is_ai_generated: boolean;
+  createdAtFormatted: string;
+  preferences?: ExtendedRecipePreferenceDTO[];
+}
+
+/**
+ * View model for manual recipe form data.
+ */
+export interface ManualRecipeFormViewModel {
+  name: string;
+  ingredients: string;
+  instructions: string;
+  preference_ids: string[];
+}
+
 //
 // AI Generation
 //
@@ -198,7 +221,7 @@ export type CreateRecipeResponseDTO = RecipeDTO;
  * Command to request recipe generation via AI.
  */
 export interface GenerateRecipeCommand {
-  prompt: string;
+  description: string;
   preferences: string[];
 }
 
@@ -225,17 +248,4 @@ export interface GenerateRecipeResponseDTO {
  */
 export interface DeleteRecipeCommand {
   id: string;
-}
-
-/**
- * View model for recipe list item display.
- */
-export interface RecipeViewModel {
-  id: string;
-  name: string;
-  ingredients: string;
-  instructions: string;
-  is_ai_generated: boolean;
-  createdAtFormatted: string;
-  preferences?: ExtendedRecipePreferenceDTO[];
 }
