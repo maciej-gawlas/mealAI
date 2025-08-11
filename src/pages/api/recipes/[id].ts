@@ -1,15 +1,11 @@
 import type { APIRoute } from "astro";
 import { getRecipeById, deleteRecipe } from "../../../services/recipeService";
 import { uuidSchema } from "../../../schemas/recipe";
-import {
-  DEFAULT_USER_ID,
-  supabaseAdminClient,
-} from "../../../db/supabase.client";
+import { supabaseAdminClient } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, locals }) => {
-  console.log("GET recipe by ID:", params.id);
   try {
     // 1. Parse and validate the ID parameter
     const { id } = params;
@@ -25,21 +21,19 @@ export const GET: APIRoute = async ({ params, locals }) => {
       );
     }
 
-    // 2. Get authenticated user from Supabase context
-    // const {
-    //   data: { user },
-    // } = await locals.supabase.auth.getUser();
-
-    // if (!user) {
-    //   return getErrorResponse(401, "Unauthorized");
-    // }
+    // // Get current user from session
+    const userId = locals.user?.id;
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     // 3. Get recipe using service
     const recipe = await getRecipeById(
-      //locals.supabase,
-      // user.id,
       supabaseAdminClient,
-      DEFAULT_USER_ID,
+      userId,
       validationResult.data,
     );
 
@@ -82,23 +76,21 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
       );
     }
 
-    // 2. Get authenticated user from Supabase context
-    // const {
-    //   data: { user },
-    // } = await locals.supabase.auth.getUser();
+    // Get current user from session
+    const userId = locals.user?.id;
 
-    // if (!user) {
-    //   const errorResponse: ErrorResponseDTO = { error: "Unauthorized" };
-    //   return new Response(JSON.stringify(errorResponse), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
+    if (!userId) {
+      return;
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     // 3. Check if recipe exists and belongs to user
     const recipe = await getRecipeById(
       supabaseAdminClient,
-      DEFAULT_USER_ID,
+      userId,
       validationResult.data,
     );
 

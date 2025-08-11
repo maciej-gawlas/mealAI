@@ -20,12 +20,10 @@ const recipeFormSchema = z.object({
 
 interface ManualRecipeFormProps {
   initialData?: Partial<ManualRecipeFormViewModel>;
-  onSubmit?: (data: CreateRecipeCommand) => Promise<void>;
 }
 
 export default function ManualRecipeForm({
   initialData,
-  onSubmit,
 }: ManualRecipeFormProps) {
   const [isPending, startTransition] = useTransition();
 
@@ -61,11 +59,9 @@ export default function ManualRecipeForm({
         }
 
         toast.success("Recipe created successfully!");
-        // Use Astro's View Transitions for smooth navigation
-        const navigationEvent = new CustomEvent("astro:navigation", {
-          detail: { url: "/recipes" },
-        });
-        window.dispatchEvent(navigationEvent);
+        setTimeout(() => {
+          window.location.href = "/recipes";
+        }, 1000);
       } catch (error) {
         toast.error("Failed to create recipe. Please try again.");
         console.error("Failed to create recipe:", error);

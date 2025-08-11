@@ -36,7 +36,7 @@ export default function AddRecipeView() {
           variant="outline"
           size="sm"
           onClick={() => (window.location.href = "/recipes")}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 cursor-pointer"
         >
           <span>&larr;</span> Powrót do listy
         </Button>

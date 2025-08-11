@@ -31,20 +31,11 @@ export function DeleteButtonWithDialog({
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      if (!token) {
-        throw new Error("Unauthorized - Please log in again");
-      }
 
       const response = await fetch(`/api/recipes/${recipeId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -60,12 +51,6 @@ export function DeleteButtonWithDialog({
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
-        if (error.message.includes("Unauthorized")) {
-          // Redirect to login page after a short delay
-          setTimeout(() => {
-            window.location.href = "/login";
-          }, 1500);
-        }
       } else {
         toast.error("Failed to delete recipe");
       }
@@ -77,7 +62,7 @@ export function DeleteButtonWithDialog({
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button size="icon" variant="destructive">
+        <Button size="icon" variant="destructive" className="cursor-pointer">
           <Trash2 className="h-4 w-4" />
           <span className="sr-only">Usuń przepis</span>
         </Button>

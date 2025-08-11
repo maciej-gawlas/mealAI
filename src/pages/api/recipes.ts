@@ -18,7 +18,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
     const validatedQuery = ListRecipesQuerySchema.parse(queryParams);
 
     // // Get current user from session
-    console.log("Locals:", locals.user);
     const userId = locals.user?.id;
     if (!userId) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -40,7 +39,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error fetching recipes:", error);
 
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
