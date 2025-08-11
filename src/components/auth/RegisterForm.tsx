@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthFormSkeleton } from "./AuthFormSkeleton";
 import { Link } from "@/components/ui/link";
+import { toast } from "sonner";
 
 const registerSchema = z
   .object({
@@ -30,13 +31,43 @@ export function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    // Implementation will be added later
-    console.log(data);
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (
+          response.status === 400 &&
+          result.error === "User already registered"
+        ) {
+          throw new Error("Użytkownik o tym adresie email już istnieje");
+        }
+        throw new Error(result.error || "Wystąpił błąd podczas rejestracji");
+      }
+
+      // Successful registration and auto-login
+      window.location.href = "/onboarding";
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Wystąpił nieoczekiwany błąd",
+      );
+    }
   };
 
   return (

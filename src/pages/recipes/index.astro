@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import RecipesListClient from '../../components/recipes/RecipesListClient.tsx';
 ---
 
-<Layout title="Twoje przepisy">
+<Layout title="Twoje przepisy" showNavigation={true}>
   <main class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold mb-8">Twoje przepisy</h1>
     <RecipesListClient client:load />
