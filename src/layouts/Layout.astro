@@ -20,7 +20,7 @@ const { title = "10x Astro Starter" } = Astro.props;
   </head>
   <body>
     <slot />
-    <Toaster richColors closeButton position="top-center" />
+    <Toaster client:load richColors closeButton position="top-center" />
   </body>
 </html>
 

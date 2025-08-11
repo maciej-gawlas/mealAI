@@ -4,7 +4,7 @@ import {
   ListRecipesQuerySchema,
 } from "../../schemas/recipe";
 import { createRecipe, listRecipes } from "../../services/recipeService";
-import { DEFAULT_USER_ID, supabaseAdminClient } from "../../db/supabase.client";
+import { supabaseAdminClient } from "../../db/supabase.client";
 
 export const prerender = false;
 
@@ -18,19 +18,20 @@ export const GET: APIRoute = async ({ request, locals }) => {
     const validatedQuery = ListRecipesQuerySchema.parse(queryParams);
 
     // // Get current user from session
-    // const userId = locals.user?.id;
-    // if (!userId) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
+    console.log("Locals:", locals.user);
+    const userId = locals.user?.id;
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     // Get recipes from service
     // const response = await listRecipes(locals.supabase, userId, validatedQuery);
     const response = await listRecipes(
       supabaseAdminClient,
-      DEFAULT_USER_ID,
+      userId,
       validatedQuery,
     );
 
@@ -50,17 +51,14 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    // // Get Supabase client from context
-    // const supabase = locals.supabase;
-
-    // // Verify authentication
-    // const { data: { session } } = await supabase.auth.getSession();
-    // if (!session) {
-    //   return new Response(
-    //     JSON.stringify({ error: "Unauthorized" }),
-    //     { status: 401, headers: { "Content-Type": "application/json" } }
-    //   );
-    // }
+    // Get current user from session
+    const userId = locals.user?.id;
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     // Parse and validate request body
     const body = await request.json();
@@ -69,7 +67,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Create recipe with preferences
     const recipe = await createRecipe(
       supabaseAdminClient,
-      DEFAULT_USER_ID,
+      userId,
       validatedData,
     );
 

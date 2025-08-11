@@ -1,8 +1,29 @@
-import { defineMiddleware } from 'astro:middleware';
+import { defineMiddleware } from "astro:middleware";
+import { createSupabaseServerInstance } from "../db/supabase.client";
+import type { AuthUserDTO } from "../types";
 
-import { supabaseClient } from '../db/supabase.client';
+export const onRequest = defineMiddleware(
+  async ({ cookies, request, locals }, next) => {
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+    locals.supabase = supabase;
 
-export const onRequest = defineMiddleware((context, next) => {
-  context.locals.supabase = supabaseClient;
-  return next();
-});
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      const authUser: AuthUserDTO = {
+        id: user.id,
+        email: user.email ?? "",
+      };
+      locals.user = authUser;
+    } else {
+      locals.user = null;
+    }
+
+    return next();
+  },
+);

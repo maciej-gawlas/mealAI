@@ -9,7 +9,6 @@ interface Props {
 }
 
 const RecipeCard: React.FC<Props> = ({ recipe }) => {
-  console.log(recipe.preferences); // Debugging line to check preferences
   return (
     <Card className="relative group hover:shadow-lg transition-all duration-300">
       <a href={`/recipes/${recipe.id}`} className="block">

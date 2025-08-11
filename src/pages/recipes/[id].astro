@@ -1,7 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { RecipeDetailsPage } from '@/components/recipes/RecipeDetailsPage';
-import { Toaster } from 'sonner';
 
 const { id } = Astro.params;
 
@@ -11,6 +10,5 @@ if (!id) {
 ---
 
 <Layout title="Recipe Details">
-  <Toaster richColors closeButton position="top-right" />
   <RecipeDetailsPage client:load id={id} />
 </Layout>

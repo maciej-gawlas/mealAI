@@ -1,6 +1,5 @@
 import { Suspense, useState, useTransition } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Toaster } from "sonner";
 import type { AIRecipeDTO } from "@/types";
 
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -76,7 +75,6 @@ export default function AddRecipeView() {
           </TabsContent>
         </Tabs>
       </ErrorBoundary>
-      <Toaster theme="system" position="top-right" expand={false} richColors />
     </div>
   );
 }
