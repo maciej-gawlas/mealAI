@@ -54,7 +54,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         status: 201,
       },
     );
-  } catch (err) {
+  } catch (_err) {
     return new Response(
       JSON.stringify({
         error: "Wystąpił błąd podczas przetwarzania żądania",

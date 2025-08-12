@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import type { PreferenceDTO } from "@/types";
 
 interface PreferenceCheckboxGroupProps {
+  id: string;
   value: string[];
   onChange: (selectedIds: string[]) => void;
 }
 
 export function PreferenceCheckboxGroup({
+  id,
   value,
   onChange,
 }: PreferenceCheckboxGroupProps) {
@@ -22,7 +24,7 @@ export function PreferenceCheckboxGroup({
         }
         const data = await response.json();
         setPreferences(data.data);
-      } catch (err) {
+      } catch (_err) {
         setError("Unable to load preferences. Please try again later.");
       }
     };
@@ -40,7 +42,7 @@ export function PreferenceCheckboxGroup({
         <div key={preference.id} className="flex items-center space-x-2">
           <input
             type="checkbox"
-            id={preference.id}
+            id={id}
             checked={value.includes(preference.id)}
             onChange={(e) => {
               const isChecked = e.target.checked;

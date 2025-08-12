@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { getAllPreferences } from "../preferencesService";
 import type { SupabaseClient } from "@/db/supabase.client";
+import { describe, expect, it } from "vitest";
+import { getAllPreferences } from "../preferencesService";
 
 describe("preferencesService", () => {
   describe("getAllPreferences", () => {
@@ -12,8 +12,12 @@ describe("preferencesService", () => {
             order: () => ({
               ilike: () => Promise.resolve({ data: [], error: null }),
               // For the non-filtered case
-              then: (callback: any) =>
-                Promise.resolve(callback({ data: [], error: null })),
+              then: (
+                callback: (result: {
+                  data: unknown[];
+                  error: unknown;
+                }) => unknown,
+              ) => Promise.resolve(callback({ data: [], error: null })),
             }),
           }),
         }),

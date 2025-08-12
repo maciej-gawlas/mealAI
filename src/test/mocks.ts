@@ -1,7 +1,12 @@
 import { http, HttpResponse, delay } from "msw";
 
 // Handler factory functions for common API operations
-export const createSuccessHandler = (url: string, data: any) => {
+export const createSuccessHandler = <
+  T extends object | string | number | boolean | null,
+>(
+  url: string,
+  data: T,
+) => {
   return http.get(url, async () => {
     await delay(100); // Simulate network delay
     return HttpResponse.json(data);

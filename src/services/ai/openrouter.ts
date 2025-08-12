@@ -1,7 +1,6 @@
-import type { AIRecipeDTO } from "../../types";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { GenerateRecipeInput } from "../../schemas/generateRecipe";
 import { z } from "zod";
+import type { GenerateRecipeInput } from "../../schemas/generateRecipe";
+import type { AIRecipeDTO } from "../../types";
 
 // Types
 interface ChatMessage {
@@ -187,7 +186,7 @@ class OpenRouterService<T> {
           Object.fromEntries(
             Object.entries(
               this.responseFormat.json_schema.schema.properties,
-            ).map(([key, value]) => [key, z.string()]),
+            ).map(([key, _value]) => [key, z.string()]),
           ),
         );
         return schema.parse(parsed) as T;

@@ -5,10 +5,8 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-  type ToastProps,
 } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
 import * as React from "react";
 
 interface ToastWithTitleProps

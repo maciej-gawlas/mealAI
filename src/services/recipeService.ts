@@ -1,12 +1,11 @@
+import type { z } from "zod";
 import type { SupabaseClient } from "../db/supabase.client";
+import type { ListRecipesQuerySchema } from "../schemas/recipe";
 import type {
   CreateRecipeCommand,
-  RecipeDTO,
-  ListRecipesResponseDTO,
   ExtendedRecipeDTO,
+  ListRecipesResponseDTO
 } from "../types";
-import type { z } from "zod";
-import type { ListRecipesQuerySchema } from "../schemas/recipe";
 
 /**
  * Creates a new recipe for the specified user.

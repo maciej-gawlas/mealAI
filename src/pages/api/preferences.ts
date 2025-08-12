@@ -6,7 +6,7 @@ import { supabaseAdminClient } from "../../db/supabase.client";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ locals, url }) => {
+export const GET: APIRoute = async ({ url }) => {
   try {
     const nameFilter = url.searchParams.get("name");
     const prefs = await getAllPreferences(

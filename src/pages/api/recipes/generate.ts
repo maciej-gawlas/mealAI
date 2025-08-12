@@ -5,7 +5,7 @@ import { supabaseAdminClient } from "../../../db/supabase.client";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, _locals }) => {
   try {
     // Parse and validate request body
     const body = await request.json();

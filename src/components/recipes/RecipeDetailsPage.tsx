@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { RecipeDetails } from "./RecipeDetails";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import type { GetRecipeResponseDTO } from "@/types";
+import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
+import { RecipeDetails } from "./RecipeDetails";
 
 import type { ExtendedRecipePreferenceDTO } from "@/types";
 

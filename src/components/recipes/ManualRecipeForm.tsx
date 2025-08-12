@@ -1,13 +1,13 @@
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { toast } from "sonner";
-import { PreferenceCheckboxGroup } from "./PreferenceCheckboxGroup";
-import type { CreateRecipeCommand, ManualRecipeFormViewModel } from "@/types";
 import { Spinner } from "@/components/ui/spinner";
+import type { CreateRecipeCommand, ManualRecipeFormViewModel } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { PreferenceCheckboxGroup } from "./PreferenceCheckboxGroup";
 
 const recipeFormSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -125,10 +125,14 @@ export default function ManualRecipeForm({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
+            <label
+              htmlFor="preference-checkbox-group"
+              className="text-sm font-medium"
+            >
               Preferencje dietetyczne
             </label>
             <PreferenceCheckboxGroup
+              id="preference-checkbox-group"
               value={form.watch("preference_ids")}
               onChange={(value) => form.setValue("preference_ids", value)}
             />

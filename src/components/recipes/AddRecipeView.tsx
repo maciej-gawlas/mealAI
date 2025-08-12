@@ -9,7 +9,7 @@ import AiRecipeGenerator from "./AiRecipeGenerator";
 import { Button } from "@/components/ui/button";
 
 export default function AddRecipeView() {
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState<"manual" | "ai">("manual");
   const [generatedRecipe, setGeneratedRecipe] = useState<AIRecipeDTO | null>(
     null,
