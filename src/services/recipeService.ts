@@ -4,7 +4,7 @@ import type { ListRecipesQuerySchema } from "../schemas/recipe";
 import type {
   CreateRecipeCommand,
   ExtendedRecipeDTO,
-  ListRecipesResponseDTO
+  ListRecipesResponseDTO,
 } from "../types";
 
 /**
