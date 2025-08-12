@@ -92,7 +92,7 @@ export function UserPreferencesForm() {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="pt-6">
-          <div className="space-y-4">
+          <div className="space-y-4" data-testid="preferences-loading">
             <div className="h-4 w-full bg-gray-200 animate-pulse rounded"></div>
             <div className="h-4 w-full bg-gray-200 animate-pulse rounded"></div>
             <div className="h-4 w-full bg-gray-200 animate-pulse rounded"></div>
