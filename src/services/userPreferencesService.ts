@@ -1,13 +1,6 @@
 import type { SupabaseClient } from "../db/supabase.client";
 import type { UserPreferenceDTO, ExtendedUserPreferenceDTO } from "../types";
 import { DB_TABLES } from "../db/database.constants";
-import type { Database } from "../db/database.types";
-
-type DbResult<T> = T extends PromiseLike<infer U> ? U : never;
-type TablesInsert<T extends keyof Database["public"]["Tables"]> =
-  Database["public"]["Tables"][T]["Insert"];
-type TableRow<T extends keyof Database["public"]["Tables"]> =
-  Database["public"]["Tables"][T]["Row"];
 
 /**
  * Updates user preferences by replacing all existing preferences with new ones
@@ -47,26 +40,17 @@ export async function updateUserPreferences(
   }
 
   // Insert new preferences
-  const { data: newPreferences, error: insertError } = (await supabase
+  const { data: newPreferences, error: insertError } = await supabase
     .from(DB_TABLES.USER_PREFERENCES)
     .insert(
-      preferencesIds.map(
-        (prefId) =>
-          ({
-            user_id: userId,
-            preference_id: prefId,
-          }) as TablesInsert<"user_preferences">,
-      ),
+      preferencesIds.map((prefId) => ({
+        user_id: userId,
+        preference_id: prefId,
+      })),
     )
-    .select()) as DbResult<
-    Promise<{
-      data: TableRow<"user_preferences">[] | null;
-      error: Error | null;
-    }>
-  >;
+    .select();
 
   if (insertError || !newPreferences) {
-    console.log("Insert error:", insertError);
     throw new Error("Failed to insert new preferences");
   }
 

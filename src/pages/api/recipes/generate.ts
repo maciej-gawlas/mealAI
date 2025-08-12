@@ -1,22 +1,25 @@
 import type { APIRoute } from "astro";
 import { GenerateRecipeSchema } from "../../../schemas/generateRecipe";
 import { generateRecipeWithAI } from "../../../services/ai/openrouter";
-import { supabaseAdminClient } from "../../../db/supabase.client";
+import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, _locals }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     // Parse and validate request body
     const body = await request.json();
     const validatedData = GenerateRecipeSchema.parse(body);
 
     // Fetch preference names from database
-    const { data: preferences, error: preferencesError } =
-      await supabaseAdminClient
-        .from("preferences")
-        .select("name")
-        .in("id", validatedData.preferences);
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+    const { data: preferences, error: preferencesError } = await supabase
+      .from("preferences")
+      .select("name")
+      .in("id", validatedData.preferences);
 
     if (preferencesError) {
       console.error("Error fetching preferences:", preferencesError);

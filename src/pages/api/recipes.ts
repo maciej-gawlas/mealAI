@@ -4,11 +4,11 @@ import {
   ListRecipesQuerySchema,
 } from "../../schemas/recipe";
 import { createRecipe, listRecipes } from "../../services/recipeService";
-import { supabaseAdminClient } from "../../db/supabase.client";
+import { createSupabaseServerInstance } from "../../db/supabase.client";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ request, locals }) => {
+export const GET: APIRoute = async ({ request, locals, cookies }) => {
   try {
     // Extract query parameters
     const url = new URL(request.url);
@@ -27,18 +27,18 @@ export const GET: APIRoute = async ({ request, locals }) => {
     }
 
     // Get recipes from service
-    // const response = await listRecipes(locals.supabase, userId, validatedQuery);
-    const response = await listRecipes(
-      supabaseAdminClient,
-      userId,
-      validatedQuery,
-    );
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+    const response = await listRecipes(supabase, userId, validatedQuery);
 
     return new Response(JSON.stringify(response), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (_error) {
+    console.error("Error fetching recipes:", _error);
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
@@ -46,7 +46,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
   }
 };
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, cookies }) => {
   try {
     // Get current user from session
     const userId = locals.user?.id;
@@ -62,11 +62,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const validatedData = CreateRecipeSchema.parse(body);
 
     // Create recipe with preferences
-    const recipe = await createRecipe(
-      supabaseAdminClient,
-      userId,
-      validatedData,
-    );
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+    const recipe = await createRecipe(supabase, userId, validatedData);
 
     // Transform preferences to match the expected format
     const responseData = {

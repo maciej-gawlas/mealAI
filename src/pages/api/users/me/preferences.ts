@@ -5,12 +5,12 @@ import {
   getUserPreferences,
 } from "../../../../services/userPreferencesService";
 import { ZodError } from "zod";
-import { supabaseAdminClient } from "../../../../db/supabase.client";
+import { createSupabaseServerInstance } from "../../../../db/supabase.client";
 import type { ExtendedUserPreferencesResponseDTO } from "../../../../types";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ locals }) => {
+export const GET: APIRoute = async ({ locals, cookies, request }) => {
   const headers = { "Content-Type": "application/json" };
 
   // // Get current user from session
@@ -23,11 +23,12 @@ export const GET: APIRoute = async ({ locals }) => {
   }
 
   try {
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
     // Get user preferences with names
-    const userPreferences = await getUserPreferences(
-      supabaseAdminClient,
-      userId,
-    );
+    const userPreferences = await getUserPreferences(supabase, userId);
 
     // Prepare response according to API contract
     const response: ExtendedUserPreferencesResponseDTO = {
@@ -58,7 +59,7 @@ export const GET: APIRoute = async ({ locals }) => {
   }
 };
 
-export const PUT: APIRoute = async ({ request, locals }) => {
+export const PUT: APIRoute = async ({ request, locals, cookies }) => {
   try {
     // Parse and validate request body
     const body = await request.json();
@@ -73,9 +74,14 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       });
     }
 
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+
     // Update preferences using the service
     const updatedPreferences = await updateUserPreferences(
-      supabaseAdminClient,
+      supabase,
       userId,
       validatedData.preferences,
     );

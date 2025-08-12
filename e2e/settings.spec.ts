@@ -7,7 +7,7 @@ test.describe("Settings page", () => {
 
   test.beforeEach(async ({ page }) => {
     // TODO: Replace with actual credentials once provided
-    await loginUser(page, "tester@example.com", "password");
+    await loginUser(page);
 
     settingsPage = new SettingsPage(page);
     await settingsPage.goto();
@@ -27,6 +27,7 @@ test.describe("Settings page", () => {
     // Select first two preferences and verify they can be saved
     await settingsPage.selectPreferences(["Dairy-Free", "Gluten-Free"]);
     await settingsPage.savePreferences();
+    await expect(settingsPage.success).toBeVisible();
 
     // Verify preferences were saved by reloading and checking
     await page.reload();
@@ -38,6 +39,7 @@ test.describe("Settings page", () => {
     await settingsPage.savePreferences();
 
     // Reload page and verify selected preferences persisted
+    await expect(settingsPage.success).toBeVisible();
     await page.reload();
     const selectedAfterUpdate = await settingsPage.getSelectedPreferences();
     expect(selectedAfterUpdate).toEqual(["Dairy-Free", "Gluten-Free"]);

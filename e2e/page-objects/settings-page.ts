@@ -9,19 +9,36 @@ export class SettingsPage {
   readonly preferences: Record<string, Locator>;
   readonly saveButton: Locator;
   readonly error: Locator;
+  readonly success: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.title = page.locator("h1");
     this.preferences = {
-      "Dairy-Free": page.getByLabel("Dairy-Free"),
-      "Gluten-Free": page.getByLabel("Gluten-Free"),
-      "Low-Carb": page.getByLabel("Low-Carb"),
-      "Nut-Free": page.getByLabel("Nut-Free"),
-      Vegetarian: page.getByLabel("Vegetarian"),
+      "Dairy-Free": page
+        .getByText("Dairy-Free")
+        .locator("..")
+        .getByRole("checkbox"),
+      "Gluten-Free": page
+        .getByText("Gluten-Free")
+        .locator("..")
+        .getByRole("checkbox"),
+      "Low-Carb": page
+        .getByText("Low-Carb")
+        .locator("..")
+        .getByRole("checkbox"),
+      "Nut-Free": page
+        .getByText("Nut-Free")
+        .locator("..")
+        .getByRole("checkbox"),
+      Vegetarian: page
+        .getByText("Vegetarian")
+        .locator("..")
+        .getByRole("checkbox"),
     };
     this.saveButton = page.getByRole("button", { name: "Zapisz preferencje" });
     this.error = page.getByText("Wybierz co najmniej jedną preferencję");
+    this.success = page.getByText("Preferencje zaktualizowane pomyślnie!");
   }
 
   /**
@@ -53,6 +70,10 @@ export class SettingsPage {
       if (await checkbox.isChecked()) {
         await checkbox.click();
       }
+    }
+
+    if (preferencesToSelect.length === 0) {
+      return; // If no preferences to select, exit early
     }
 
     // Then select specified ones

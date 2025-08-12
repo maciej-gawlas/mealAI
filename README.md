@@ -120,6 +120,22 @@ In the project directory, you can run:
 
 We have implemented a comprehensive testing strategy following the testing pyramid:
 
+### Test Environment Setup
+
+Before running tests, create a `.env.test` file in the project root with test-specific variables:
+
+```dotenv
+SUPABASE_URL=your-test-supabase-url
+SUPABASE_ANON_KEY=your-test-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-test-service-role-key
+OPENROUTER_API_KEY=your-test-openrouter-key
+
+# E2E Test User Credentials
+E2E_USERNAME_ID=your-test-user-id
+E2E_USERNAME=test@example.com
+E2E_PASSWORD=your-test-password
+```
+
 ### Unit Tests (Vitest + React Testing Library)
 
 - Test individual components, utilities, and services
@@ -145,10 +161,27 @@ npm run test:ui     # Run with Vitest UI
 - Located in the `e2e` directory
 - Follow the Page Object Model pattern for maintainability
 
+The E2E tests use a separate build with test environment variables:
+
 ```bash
+# Running E2E tests
 npm run test:e2e    # Run all E2E tests
 npm run test:e2e:ui # Run with Playwright UI
+
+# Manual testing with test environment
+npm run build:test    # Build with test environment
+npm run preview:test  # Preview test build
 ```
+
+#### E2E Test Development
+
+1. Create/update your test in the `e2e` directory
+2. Tests automatically use credentials from `.env.test`
+3. Test data cleanup is handled automatically after each test run
+4. For local development:
+   - Use `npm run build:test` to build with test environment
+   - Use `npm run preview:test` to preview the test build
+   - Tests will automatically handle build and preview when running
 
 For more detailed information about testing, see [docs/testing.md](docs/testing.md).
 

@@ -12,10 +12,10 @@ const EmptyState: React.FC = () => {
       </p>
       <div className="space-x-4">
         <Button asChild>
-          <a href="/recipes/new">Dodaj przepis</a>
+          <a href="/recipes/add">Dodaj przepis</a>
         </Button>
         <Button variant="outline" asChild>
-          <a href="/generate">Generuj z AI</a>
+          <a href="/recipes/add?tab=ai">Generuj z AI</a>
         </Button>
       </div>
     </div>

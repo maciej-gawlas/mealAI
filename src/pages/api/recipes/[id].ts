@@ -1,11 +1,11 @@
 import type { APIRoute } from "astro";
 import { getRecipeById, deleteRecipe } from "../../../services/recipeService";
 import { uuidSchema } from "../../../schemas/recipe";
-import { supabaseAdminClient } from "../../../db/supabase.client";
+import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params, locals }) => {
+export const GET: APIRoute = async ({ params, locals, cookies, request }) => {
   try {
     // 1. Parse and validate the ID parameter
     const { id } = params;
@@ -31,11 +31,11 @@ export const GET: APIRoute = async ({ params, locals }) => {
     }
 
     // 3. Get recipe using service
-    const recipe = await getRecipeById(
-      supabaseAdminClient,
-      userId,
-      validationResult.data,
-    );
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+    const recipe = await getRecipeById(supabase, userId, validationResult.data);
 
     if (!recipe) {
       return new Response(JSON.stringify({ error: "Recipe not found" }), {
@@ -60,7 +60,12 @@ export const GET: APIRoute = async ({ params, locals }) => {
   }
 };
 
-export const DELETE: APIRoute = async ({ params, locals }) => {
+export const DELETE: APIRoute = async ({
+  params,
+  locals,
+  cookies,
+  request,
+}) => {
   try {
     // 1. Parse and validate the ID parameter
     const { id } = params;
@@ -89,7 +94,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
 
     // 3. Check if recipe exists and belongs to user
     const recipe = await getRecipeById(
-      supabaseAdminClient,
+      supabaseClient,
       userId,
       validationResult.data,
     );
@@ -102,7 +107,11 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
     }
 
     // 4. Delete the recipe
-    await deleteRecipe(supabaseAdminClient, validationResult.data);
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
+    await deleteRecipe(supabase, validationResult.data);
 
     // 5. Return success response with no content
     return new Response(null, {

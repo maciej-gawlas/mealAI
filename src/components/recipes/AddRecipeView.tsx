@@ -1,4 +1,4 @@
-import { Suspense, useState, useTransition } from "react";
+import { Suspense, useState, useTransition, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { AIRecipeDTO } from "@/types";
 
@@ -11,6 +11,16 @@ import { Button } from "@/components/ui/button";
 export default function AddRecipeView() {
   const [_isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState<"manual" | "ai">("manual");
+
+  useEffect(() => {
+    const tab = new URLSearchParams(window.location.search).get("tab") as
+      | "manual"
+      | "ai"
+      | null;
+    if (tab === "manual" || tab === "ai") {
+      setActiveTab(tab);
+    }
+  }, []);
   const [generatedRecipe, setGeneratedRecipe] = useState<AIRecipeDTO | null>(
     null,
   );

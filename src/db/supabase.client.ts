@@ -41,8 +41,8 @@ export function createSupabaseServerInstance(context: {
 }
 
 // Service role key client for server-side operations (bypasses RLS)
-const supabaseServiceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
-export const supabaseAdminClient = createClient<Database>(
-  supabaseUrl,
-  supabaseServiceRoleKey,
-);
+// const supabaseServiceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+// export const supabaseClient = createClient<Database>(
+//   supabaseUrl,
+//   supabaseServiceRoleKey,
+// );

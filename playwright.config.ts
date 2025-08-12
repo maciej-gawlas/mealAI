@@ -1,4 +1,7 @@
 import { defineConfig } from "@playwright/test";
+import path from "path";
+import dotenv from "dotenv";
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
 export default defineConfig({
   testDir: "./e2e",
@@ -34,9 +37,12 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm run preview",
+    command: "npm run build:test && npm run preview:test",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
     timeout: 30000,
   },
+
+  /* Clean up test data after all tests */
+  globalTeardown: "./e2e/utils/cleanup.ts",
 });
