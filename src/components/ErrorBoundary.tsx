@@ -14,12 +14,13 @@ export class ErrorBoundary extends Component<Props, State> {
     hasError: false,
   };
 
-  public static getDerivedStateFromError(_: Error): State {
+  public static getDerivedStateFromError(): State {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+  public componentDidCatch() {
+    // Log error to an error reporting service in production
+    // console.error("Uncaught error:", _error, _errorInfo);
   }
 
   public render() {

@@ -64,8 +64,8 @@ export default function DeleteConfirmationDialog({
             Czy na pewno chcesz usunąć ten przepis?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Zamierzasz usunąć przepis "{recipeName}". Tej operacji nie można
-            cofnąć.
+            Zamierzasz usunąć przepis &quot;{recipeName}&quot;. Tej operacji nie
+            można cofnąć.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

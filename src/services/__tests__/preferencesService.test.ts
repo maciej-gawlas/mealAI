@@ -12,7 +12,8 @@ describe("preferencesService", () => {
             order: () => ({
               ilike: () => Promise.resolve({ data: [], error: null }),
               // For the non-filtered case
-              then: (callback: any) => Promise.resolve(callback({ data: [], error: null })),
+              then: (callback: any) =>
+                Promise.resolve(callback({ data: [], error: null })),
             }),
           }),
         }),

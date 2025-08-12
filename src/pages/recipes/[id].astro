@@ -1,11 +1,11 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { RecipeDetailsPage } from '@/components/recipes/RecipeDetailsPage';
+import Layout from "@/layouts/Layout.astro";
+import { RecipeDetailsPage } from "@/components/recipes/RecipeDetailsPage";
 
 const { id } = Astro.params;
 
 if (!id) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 ---
 

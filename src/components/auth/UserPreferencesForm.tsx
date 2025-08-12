@@ -58,7 +58,7 @@ export function UserPreferencesForm() {
           (pref: { preference_id: string }) => pref.preference_id,
         );
         setValue("preferences", preferenceIds);
-      } catch (_) {
+      } catch (_error) {
         toast.error("Nie udało się pobrać twoich preferencji");
       } finally {
         setIsLoading(false);

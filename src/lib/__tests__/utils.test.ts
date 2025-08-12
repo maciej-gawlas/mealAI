@@ -31,12 +31,15 @@ describe("cn utility function", () => {
   });
 
   it("handles object inputs", () => {
-    const result = cn({ "class1": true, "class2": false });
+    const result = cn({ class1: true, class2: false });
     expect(result).toBe("class1");
   });
 
   it("handles mixed input types", () => {
-    const result = cn("class1", ["class2", "class3"], { "class4": true, "class5": false });
+    const result = cn("class1", ["class2", "class3"], {
+      class4: true,
+      class5: false,
+    });
     expect(result).toBe("class1 class2 class3 class4");
   });
 });

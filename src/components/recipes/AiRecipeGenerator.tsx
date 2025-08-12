@@ -80,10 +80,11 @@ export default function AiRecipeGenerator({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
+            <label htmlFor="preferences" className="text-sm font-medium">
               Preferencje dietetyczne
             </label>
             <PreferenceCheckboxGroup
+              id="preferences"
               value={form.watch("preferences")}
               onChange={(value) => form.setValue("preferences", value)}
             />

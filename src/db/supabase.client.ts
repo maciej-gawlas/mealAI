@@ -25,23 +25,19 @@ export function createSupabaseServerInstance(context: {
   headers: Headers;
   cookies: AstroCookies;
 }) {
-  return createServerClient<Database>(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
-      cookies: {
-        get(name: string) {
-          return context.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          context.cookies.set(name, value, options);
-        },
-        remove(name: string, options: CookieOptions) {
-          context.cookies.delete(name, options);
-        },
+  return createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      get(name: string) {
+        return context.cookies.get(name)?.value;
+      },
+      set(name: string, value: string, options: CookieOptions) {
+        context.cookies.set(name, value, options);
+      },
+      remove(name: string, options: CookieOptions) {
+        context.cookies.delete(name, options);
       },
     },
-  );
+  });
 }
 
 // Service role key client for server-side operations (bypasses RLS)

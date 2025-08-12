@@ -46,11 +46,11 @@ interface ChatCompletionRequest {
 }
 
 interface RawApiResponse {
-  choices: Array<{
+  choices: {
     message: {
       content: string;
     };
-  }>;
+  }[];
 }
 
 // Error classes

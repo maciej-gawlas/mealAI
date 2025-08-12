@@ -7,7 +7,6 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-
     // Parse and validate request body
     const body = await request.json();
     const validatedData = GenerateRecipeSchema.parse(body);

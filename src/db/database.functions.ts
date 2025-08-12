@@ -1,9 +1,9 @@
-import type { Database } from './database.types';
+import type { Database } from "./database.types";
 
-export type Tables = Database['public']['Tables'];
-export type UserPreference = Tables['user_preferences']['Row'];
+export type Tables = Database["public"]["Tables"];
+export type UserPreference = Tables["user_preferences"]["Row"];
 
-export type DatabaseFunctions = {
+export interface DatabaseFunctions {
   update_user_preferences: {
     Args: {
       p_user_id: string;
@@ -11,4 +11,4 @@ export type DatabaseFunctions = {
     };
     Returns: UserPreference[];
   };
-};
+}

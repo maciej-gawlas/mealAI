@@ -8,7 +8,11 @@ export const createSuccessHandler = (url: string, data: any) => {
   });
 };
 
-export const createErrorHandler = (url: string, status = 500, message = "Server error") => {
+export const createErrorHandler = (
+  url: string,
+  status = 500,
+  message = "Server error",
+) => {
   return http.get(url, async () => {
     await delay(100);
     return new HttpResponse(JSON.stringify({ message }), {
@@ -29,9 +33,21 @@ export const handlers = [
       {
         id: "1",
         title: "Pasta Carbonara",
-        description: "Classic Italian pasta dish with eggs, cheese, pancetta, and black pepper",
-        ingredients: ["Spaghetti", "Eggs", "Pancetta", "Parmesan", "Black Pepper"],
-        instructions: ["Cook pasta", "Fry pancetta", "Mix eggs and cheese", "Combine all ingredients"],
+        description:
+          "Classic Italian pasta dish with eggs, cheese, pancetta, and black pepper",
+        ingredients: [
+          "Spaghetti",
+          "Eggs",
+          "Pancetta",
+          "Parmesan",
+          "Black Pepper",
+        ],
+        instructions: [
+          "Cook pasta",
+          "Fry pancetta",
+          "Mix eggs and cheese",
+          "Combine all ingredients",
+        ],
         cookingTime: 20,
         servings: 2,
         tags: ["italian", "pasta", "quick"],
@@ -40,8 +56,20 @@ export const handlers = [
         id: "2",
         title: "Vegetable Stir Fry",
         description: "Quick and healthy vegetable stir fry with soy sauce",
-        ingredients: ["Mixed Vegetables", "Soy Sauce", "Ginger", "Garlic", "Rice"],
-        instructions: ["Prepare vegetables", "Heat wok", "Stir fry vegetables", "Add sauce", "Serve with rice"],
+        ingredients: [
+          "Mixed Vegetables",
+          "Soy Sauce",
+          "Ginger",
+          "Garlic",
+          "Rice",
+        ],
+        instructions: [
+          "Prepare vegetables",
+          "Heat wok",
+          "Stir fry vegetables",
+          "Add sauce",
+          "Serve with rice",
+        ],
         cookingTime: 15,
         servings: 2,
         tags: ["vegetarian", "quick", "healthy"],

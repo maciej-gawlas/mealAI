@@ -108,7 +108,8 @@ export async function getRecipeById(
 ): Promise<ExtendedRecipeDTO | null> {
   const { data, error } = await supabase
     .from("recipes")
-    .select(`
+    .select(
+      `
       *,
       recipe_preferences (
         preference:preferences (
@@ -116,7 +117,8 @@ export async function getRecipeById(
           name
         )
       )
-    `)
+    `,
+    )
     .eq("id", recipeId)
     .eq("user_id", userId)
     .single();
@@ -149,7 +151,8 @@ export async function listRecipes(
 
   let queryBuilder = supabase
     .from("recipes")
-    .select(`
+    .select(
+      `
       *,
       recipe_preferences (
         preference:preferences (
@@ -157,7 +160,9 @@ export async function listRecipes(
           name
         )
       )
-    `, { count: "exact" })
+    `,
+      { count: "exact" },
+    )
     .eq("user_id", userId);
 
   // Filter by preference if specified
@@ -168,7 +173,10 @@ export async function listRecipes(
       .eq("preference_id", query.preference);
 
     if (recipeIds && recipeIds.length > 0) {
-      queryBuilder = queryBuilder.in("id", recipeIds.map(r => r.recipe_id));
+      queryBuilder = queryBuilder.in(
+        "id",
+        recipeIds.map((r) => r.recipe_id),
+      );
     } else {
       // If no recipes found with this preference, return empty result
       return {

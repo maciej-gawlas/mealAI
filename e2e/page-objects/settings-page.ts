@@ -6,7 +6,7 @@ import type { Page, Locator } from "@playwright/test";
 export class SettingsPage {
   readonly page: Page;
   readonly title: Locator;
-  readonly preferences: { [key: string]: Locator };
+  readonly preferences: Record<string, Locator>;
   readonly saveButton: Locator;
   readonly error: Locator;
 
@@ -18,7 +18,7 @@ export class SettingsPage {
       "Gluten-Free": page.getByLabel("Gluten-Free"),
       "Low-Carb": page.getByLabel("Low-Carb"),
       "Nut-Free": page.getByLabel("Nut-Free"),
-      "Vegetarian": page.getByLabel("Vegetarian")
+      Vegetarian: page.getByLabel("Vegetarian"),
     };
     this.saveButton = page.getByRole("button", { name: "Zapisz preferencje" });
     this.error = page.getByText("Wybierz co najmniej jedną preferencję");

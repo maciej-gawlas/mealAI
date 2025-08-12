@@ -7,7 +7,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       cookies,
       headers: request.headers,
     });
-    
+
     const { error } = await supabase.auth.signOut();
 
     if (error) {
