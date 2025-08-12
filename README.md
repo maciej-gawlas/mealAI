@@ -7,9 +7,10 @@
 1. [Tech Stack](#tech-stack)
 2. [Getting Started Locally](#getting-started-locally)
 3. [Available Scripts](#available-scripts)
-4. [Project Scope](#project-scope)
-5. [Project Status](#project-status)
-6. [License](#license)
+4. [Testing](#testing)
+5. [Project Scope](#project-scope)
+6. [Project Status](#project-status)
+7. [License](#license)
 
 ## Tech Stack
 
@@ -57,6 +58,15 @@ nvm use
 yarn
 ```
 
+cd mealAI
+npm install
+
+# Setup Playwright (for E2E tests)
+
+./setup-playwright.sh
+
+````
+
 ### Environment Variables
 
 Create a `.env` file in the project root with the following entries:
@@ -65,40 +75,82 @@ Create a `.env` file in the project root with the following entries:
 SUPABASE_URL=https://your-supabase-project.supabase.co
 SUPABASE_ANON_KEY=your-supabase-anon-key
 OPENROUTER_API_KEY=your-openrouter-api-key
-```
+````
 
 ### Run in Development
 
 ```bash
-yarn dev
+npm run dev
 ```
 
-Open your browser at `http://localhost:3000` (or the URL shown in the terminal).
+Open your browser at `http://localhost:4321` (or the URL shown in the terminal).
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-- `yarn dev`
+- `npm run dev`
   Start Astro in development mode with hot reload.
-- `yarn build`
+- `npm run build`
   Build the production site.
-- `yarn preview`
+- `npm run preview`
   Preview the production build locally.
-- `yarn astro`
+- `npm run astro`
   Run the Astro CLI.
-- `yarn test`
+- `npm run test`
   Run unit and component tests with Vitest.
-- `yarn test:e2e`
+- `npm run test:watch`
+  Run tests in watch mode during development.
+- `npm run test:ui`
+  Run tests with the Vitest UI.
+- `npm run test:coverage`
+  Generate test coverage report.
+- `npm run test:e2e`
   Run end-to-end tests with Playwright.
-- `yarn test:visual`
-  Run visual regression tests with Percy/Chromatic.
-- `yarn lint`
+- `npm run test:e2e:ui`
+  Run end-to-end tests with Playwright UI.
+- `npm run lint`
   Run ESLint to catch code issues.
-- `yarn lint:fix`
+- `npm run lint:fix`
   Run ESLint and automatically fix problems.
-- `yarn format`
+- `npm run format`
   Format all files with Prettier.
+
+## Testing
+
+We have implemented a comprehensive testing strategy following the testing pyramid:
+
+### Unit Tests (Vitest + React Testing Library)
+
+- Test individual components, utilities, and services
+- Fast execution and focused on specific functionality
+- Located in `__tests__` directories next to the code they test
+
+```bash
+npm run test        # Run all unit tests
+npm run test:watch  # Run in watch mode during development
+npm run test:ui     # Run with Vitest UI
+```
+
+### Integration Tests (MSW for API mocking)
+
+- Test interactions between components and services
+- Mock API requests to test frontend logic with controlled responses
+- MSW setup in `src/test/server.ts` and handlers in `src/test/mocks.ts`
+
+### End-to-End Tests (Playwright)
+
+- Test complete user flows from a user's perspective
+- Run in real browsers (Chromium)
+- Located in the `e2e` directory
+- Follow the Page Object Model pattern for maintainability
+
+```bash
+npm run test:e2e    # Run all E2E tests
+npm run test:e2e:ui # Run with Playwright UI
+```
+
+For more detailed information about testing, see [docs/testing.md](docs/testing.md).
 
 ## Project Scope
 

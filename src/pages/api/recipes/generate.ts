@@ -1,26 +1,12 @@
 import type { APIRoute } from "astro";
 import { GenerateRecipeSchema } from "../../../schemas/generateRecipe";
 import { generateRecipeWithAI } from "../../../services/ai/openrouter";
-import {
-  DEFAULT_USER_ID,
-  supabaseAdminClient,
-} from "../../../db/supabase.client";
+import { supabaseAdminClient } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    // // Get Supabase client from context
-    // const supabase = locals.supabase;
-
-    // // Verify authentication
-    // const { data: { session } } = await supabase.auth.getSession();
-    // if (!session) {
-    //   return new Response(
-    //     JSON.stringify({ error: "Unauthorized" }),
-    //     { status: 401, headers: { "Content-Type": "application/json" } }
-    //   );
-    // }
 
     // Parse and validate request body
     const body = await request.json();

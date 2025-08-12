@@ -1,8 +1,9 @@
 ---
-import { LoginForm } from "../components/auth/LoginForm";
-import Layout from "../layouts/Layout.astro";
----
+// Enable SSR for redirects
+export const prerender = false;
 
-<Layout title="Logowanie">
-  <LoginForm client:load />
-</Layout>
+// Redirect to login page
+if (Astro.request.method === 'GET') {
+  return Astro.redirect('/login');
+}
+---

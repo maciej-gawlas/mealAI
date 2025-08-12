@@ -5,31 +5,28 @@ import {
   getUserPreferences,
 } from "../../../../services/userPreferencesService";
 import { ZodError } from "zod";
-import {
-  DEFAULT_USER_ID,
-  supabaseAdminClient,
-} from "../../../../db/supabase.client";
+import { supabaseAdminClient } from "../../../../db/supabase.client";
 import type { ExtendedUserPreferencesResponseDTO } from "../../../../types";
-import type { Locals } from "../../../../middleware/types";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ locals }) => {
   const headers = { "Content-Type": "application/json" };
 
-  // Check if user is authenticated
-  // if (!locals.user) {
-  //   return new Response(JSON.stringify({ error: 'Authentication required to access user preferences' }), {
-  //     status: 401,
-  //     headers
-  //   });
-  // }
+  // // Get current user from session
+  const userId = locals.user?.id;
+  if (!userId) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
   try {
     // Get user preferences with names
     const userPreferences = await getUserPreferences(
       supabaseAdminClient,
-      DEFAULT_USER_ID,
+      userId,
     );
 
     // Prepare response according to API contract
@@ -67,10 +64,19 @@ export const PUT: APIRoute = async ({ request, locals }) => {
     const body = await request.json();
     const validatedData = UpdateUserPreferencesCommandSchema.parse(body);
 
+    // // Get current user from session
+    const userId = locals.user?.id;
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     // Update preferences using the service
     const updatedPreferences = await updateUserPreferences(
       supabaseAdminClient,
-      DEFAULT_USER_ID,
+      userId,
       validatedData.preferences,
     );
 
