@@ -14,7 +14,6 @@
 ## Tech Stack
 
 - **Frontend**
-
   - Astro 5
   - React 19 (Shadcn/UI components)
   - TypeScript 5
@@ -22,12 +21,15 @@
   - clsx, class‐variance‐authority, lucide‐react, tw‐animate‐css
 
 - **Backend**
-
   - Supabase (PostgreSQL, Auth)
 
 - **AI Integration**
-
   - Openrouter.ai (OpenAI, Anthropic, Google, …)
+
+- **Testing**
+  - Vitest + React Testing Library (Unit & Component Tests)
+  - Mock Service Worker (MSW) for API mocking
+  - Playwright (End-to-End Tests)
 
 - **CI / CD & Hosting**
   - GitHub Actions
@@ -85,6 +87,12 @@ In the project directory, you can run:
   Preview the production build locally.
 - `yarn astro`
   Run the Astro CLI.
+- `yarn test`
+  Run unit and component tests with Vitest.
+- `yarn test:e2e`
+  Run end-to-end tests with Playwright.
+- `yarn test:visual`
+  Run visual regression tests with Percy/Chromatic.
 - `yarn lint`
   Run ESLint to catch code issues.
 - `yarn lint:fix`
