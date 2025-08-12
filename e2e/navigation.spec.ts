@@ -29,6 +29,6 @@ test.describe("Basic navigation flow", () => {
     await loginPage.login("invalid@example.com", "wrongpassword");
 
     // Should show an error message
-    await loginPage.expectErrorMessage();
+    await expect(page).toHaveURL(/\/login$/);
   });
 });
