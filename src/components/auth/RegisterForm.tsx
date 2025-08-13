@@ -61,7 +61,7 @@ export function RegisterForm() {
       }
 
       // Successful registration and auto-login
-      window.location.href = "/onboarding";
+      window.location.href = "/settings";
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Wystąpił nieoczekiwany błąd",
