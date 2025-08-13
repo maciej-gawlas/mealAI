@@ -5,11 +5,15 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import vercel from "@astrojs/vercel";
+import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  adapter: vercel({}),
+  // Use Vercel adapter for production, Node adapter for dev/preview
+  adapter: import.meta.env.IS_VERCEL
+    ? vercel({})
+    : node({ mode: "standalone" }),
   integrations: [react(), sitemap()],
   server: { port: 3000 },
   vite: {
@@ -20,5 +24,7 @@ export default defineConfig({
         : {},
     },
   },
-  experimental: {},
+  experimental: {
+    session: !import.meta.env.IS_VERCEL,
+  },
 });
