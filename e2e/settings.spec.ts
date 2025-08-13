@@ -6,7 +6,6 @@ test.describe("Settings page", () => {
   let settingsPage: SettingsPage;
 
   test.beforeEach(async ({ page }) => {
-    // TODO: Replace with actual credentials once provided
     await loginUser(page);
 
     settingsPage = new SettingsPage(page);
