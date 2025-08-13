@@ -1,5 +1,5 @@
 {
   "name": "healthymeal",
   "compatibility_date": "2025-08-13",
-  "main": "./dist/worker.js"
+  "main": "./dist/_worker.js/index.js"
 }
