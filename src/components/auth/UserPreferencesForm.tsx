@@ -81,6 +81,9 @@ export function UserPreferencesForm() {
       }
 
       toast.success("Preferencje zaktualizowane pomyślnie!");
+      setTimeout(() => {
+        window.location.href = "/recipes";
+      }, 1000);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
